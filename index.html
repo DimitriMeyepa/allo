@@ -14,7 +14,7 @@
     h1 {
       margin: 10px;
     }
-    #score {
+    #score, #timer {
       font-size: 24px;
       margin-bottom: 10px;
     }
@@ -36,6 +36,7 @@
 <body>
   <h1>💩 Mets le Caca dans la Toilette 🚽</h1>
   <div id="score">Score : 0</div>
+  <div id="timer">Temps restant : 5:00</div>
   <div id="toilet">🚽</div>
 
   <script>
@@ -47,7 +48,6 @@
       poop.innerText = "💩";
       poop.style.left = Math.random() * window.innerWidth + "px";
       poop.style.top = Math.random() * (window.innerHeight - 150) + "px";
-
       poop.draggable = true;
 
       poop.addEventListener("dragstart", e => {
@@ -58,7 +58,6 @@
       document.body.appendChild(poop);
     }
 
-    // Toilet drop zone
     const toilet = document.getElementById("toilet");
 
     toilet.addEventListener("dragover", e => {
@@ -75,7 +74,25 @@
       }
     });
 
-    setInterval(createPoop, 1500);
+    const poopInterval = setInterval(createPoop, 1500);
+
+    // Timer
+    let timeLeft = 5 * 60; // 5 minutes
+    const timerDiv = document.getElementById("timer");
+
+    const timerInterval = setInterval(() => {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerDiv.innerText = `Temps restant : ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+      timeLeft--;
+
+      if (timeLeft < 0) {
+        clearInterval(timerInterval);
+        clearInterval(poopInterval);
+        alert("⏰ Temps écoulé ! Score final : " + score);
+        document.querySelectorAll(".poop").forEach(p => p.remove());
+      }
+    }, 1000);
   </script>
 </body>
 </html>
