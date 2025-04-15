@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>💩 Glisse le Caca dans la Toilette</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: sans-serif;
+      background-color: #e8fce8;
+      text-align: center;
+    }
+    h1 {
+      margin: 10px;
+    }
+    #score {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    .poop {
+      position: absolute;
+      font-size: 40px;
+      cursor: grab;
+      user-select: none;
+    }
+    #toilet {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 60px;
+    }
+  </style>
+</head>
+<body>
+  <h1>💩 Mets le Caca dans la Toilette 🚽</h1>
+  <div id="score">Score : 0</div>
+  <div id="toilet">🚽</div>
+
+  <script>
+    let score = 0;
+
+    function createPoop() {
+      const poop = document.createElement("div");
+      poop.className = "poop";
+      poop.innerText = "💩";
+      poop.style.left = Math.random() * window.innerWidth + "px";
+      poop.style.top = Math.random() * (window.innerHeight - 150) + "px";
+
+      poop.draggable = true;
+
+      poop.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("text/plain", "poop");
+        poop.id = "dragged";
+      });
+
+      document.body.appendChild(poop);
+    }
+
+    // Toilet drop zone
+    const toilet = document.getElementById("toilet");
+
+    toilet.addEventListener("dragover", e => {
+      e.preventDefault();
+    });
+
+    toilet.addEventListener("drop", e => {
+      e.preventDefault();
+      const poop = document.getElementById("dragged");
+      if (poop) {
+        poop.remove();
+        score++;
+        document.getElementById("score").innerText = "Score : " + score;
+      }
+    });
+
+    setInterval(createPoop, 1500);
+  </script>
+</body>
+</html>
